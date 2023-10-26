@@ -1,12 +1,14 @@
 package com.springboot.SpringBoot.service;
 
 import com.springboot.SpringBoot.entity.Department;
+import com.springboot.SpringBoot.exceptions.DepartmentNotFoundException;
 import com.springboot.SpringBoot.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
@@ -22,9 +24,16 @@ public class DepartmentServiceImpl implements DepartmentService{
         return departmentRepository.findAll();
     }
 
+    // Even after using exception handling using the custom exception, we are getting useless data,
+    // so avoid that we need to configure that exception and send the appropriate response to frontend
+    // for that we create class that is responsible for sending the response
     @Override
-    public Department fetchDepartmentByID(Long departmentID) {
-        return departmentRepository.findById(departmentID).get();
+    public Department fetchDepartmentByID(Long departmentID) throws DepartmentNotFoundException {
+        Optional<Department> department = departmentRepository.findById(departmentID);
+        if(department.isEmpty()) {
+            throw new DepartmentNotFoundException("Department not available!");
+        }
+        return department.get();
     }
 
     @Override
