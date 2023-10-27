@@ -1,0 +1,65 @@
+server:
+  port: 8000
+
+spring:
+  profiles:
+    active: qa
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/springbootdb
+    password: paarth
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+test:
+  message: API is up and running on port 8000 !
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: qa
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/springbootdb-qa
+    password: paarth
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: 'true'
+test:
+  message: API is up and running on port 8000 !
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "env, beans"
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/springbootdb-prod
+    password: paarth
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: 'true'
+test:
+  message: API is up and running on port 8000 !
